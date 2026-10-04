@@ -1,0 +1,38 @@
+---
+name: homepage-sections
+description: >-
+  Quy tắc tái sử dụng cho các section trang chủ — Hero, Why, features, marquee, night CTA,
+  Reveal pattern, SectionHeading convention.
+  Triggers: hero section, why section, features, testimonial, CTA section, marquee.
+license: MIT
+---
+
+# Trang chủ — Section Patterns
+
+## Order (home page flow)
+1. `<Hero />` — editorial headline + breathing orb + stats.
+2. `<Marquee />` — affirmation bar (GSAP infinite scroll, prefers-reduced-motion).
+3. `Why Section` — 3 feature cards (RevealItem stagger).
+4. `Stories Preview` — SectionHeading + StoryCard masonry.
+5. `Journal Paper Demo` — interactive preview.
+6. `Hugs Teaser` — night CTA.
+7. `<Footer />` — đêm sao.
+
+## Section wrapper
+- `<section className="grain relative overflow-hidden">` + `aria-label`.
+- `.container-page` padding.
+- Decorative blur circles: `pointer-events-none absolute ... blur-3xl`.
+
+## Reveal pattern (scroll animation)
+- Import `{ Reveal, RevealItem }` từ `@/components/home/Reveal`.
+- `Reveal` bọc toàn section, `RevealItem` cho từng card/list item.
+- Duration ≤ 600ms, `power3.out` easing.
+
+## SectionHeading
+- Props: `index="01"`, `eyebrow`, `title`, `lead?`, `align="left|center"`.
+- eyebrow format: `<span className="font-display text-clay tabular-nums">{index}</span> {eyebrow}`.
+- Title: `text-balance font-display text-3xl md:text-4xl font-semibold`.
+
+## Spacing convention
+- `py-20 md:py-28` cho section.
+- `py-16 md:py-20` cho subsections.

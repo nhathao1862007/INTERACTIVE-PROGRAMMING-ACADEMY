@@ -1,0 +1,31 @@
+---
+name: responsive
+description: >-
+  Quy tắc responsive — mobile-first breakpoint, grid layout scaling, typography clamp(),
+  touch targets, mobile menu pattern.
+  Triggers: responsive, mobile, breakpoint, grid, mobile menu, tablet.
+license: MIT
+---
+
+# Responsive Design
+
+## Breakpoints (Tailwind)
+- `sm`: 640px, `md`: 768px, `lg`: 1024px, `xl`: 1280px, `2xl`: 1440px.
+- Mobile-first: viết class mobile trước, `md:`/`lg:` override.
+
+## Grid / Layout
+- Desktop: 2-column grid (`lg:grid-cols-[1.05fr_0.95fr]`).
+- Tablet/mobile: 1-col, padding `container-page`.
+- Section padding: `py-16 md:py-20`, `py-20 md:py-24`.
+
+## Typography scaling
+- Dùng `clamp()` cho font size: `text-[clamp(2.25rem,5vw,3rem)]`.
+- Line height: 1.04–1.12 cho heading, 1.6–1.75 cho body.
+
+## Touch targets
+- Nút nhấn tối thiểu 40×40px (`md:hidden` menu toggle 44×44).
+- Form input padding ≥ 12px.
+
+## Mobile menu
+- Component: `<MobileMenu>` trong Header.
+- `<details>`/`:focus-within` pattern — keyboard-accessible.

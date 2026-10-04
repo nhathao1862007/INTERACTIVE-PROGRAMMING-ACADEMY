@@ -1,0 +1,33 @@
+---
+name: performance
+description: >-
+  Nguyên tắm performance — bundle budget, image optimization, font loading, caching strategy,
+  CSS transition vs GSAP, will-change usage.
+  Triggers: performance, bundle, images, font loading, caching, optimization.
+license: MIT
+---
+
+# Performance Engineering
+
+## Bundle budget
+- `next build` — total JS < 200 KB compressed.
+- Tránh bundle quá lớn: dùng `dynamic import()` cho heavy modal/component.
+
+## Images
+- Dùng `<Image>` (Next.js built-in). `alt` mô tả ngữ nghĩa.
+- `placeholder="blur"` cho LCP ảnh.
+- Format: `.avif`/`.webp`, width/height hint.
+
+## Fonts
+- `next/font/google`: `Be_Vietnam_Pro` (sans), `Playfair_Display` (display).
+- `display: "swap"` để tránh FOIT.
+
+## Animation performance (GSAP)
+- Tween **chỉ** `transform`, `opacity`, `filter` — trigger GPU composite.
+- `will-change: transform` nếu animation lâu dài.
+- `transition: all` → chỉ định rõ property.
+- `prefers-reduced-motion` — luôn wrap GSAP enter animations trong media query.
+
+## Caching
+- Route static: `revalidate: false` cho public pages.
+- Middleware cache session trong 5 phút.

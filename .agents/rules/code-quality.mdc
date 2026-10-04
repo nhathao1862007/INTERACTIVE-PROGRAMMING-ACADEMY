@@ -1,0 +1,34 @@
+---
+name: code-quality
+description: >-
+  Quy tắc chất lượng code — TypeScript strict, ESLint rules, Prettier formatting,
+  chiến lược testing (Vitest), hạn chế suppress.
+  Triggers: code quality, eslint, prettier, tsconfig, testing, vitest, coverage.
+license: MIT
+---
+
+# Chất lượng code
+
+## TypeScript (strict mode)
+- `tsconfig.json`: `"strict": true`, `"noUnusedLocals": true`, `"noUnusedParameters": true`.
+- Phải ép kiểu trả về hàm: `function foo(): string {}`.
+- Tránh `any` — dùng `unknown` + type narrowing, hoặc `z.infer<typeof schema>`.
+
+## ESLint
+- Chạy `npm run lint` trước commit. Auto-fix: `eslint --fix`.
+- Rule nghiêm: `@typescript-eslint/no-explicit-any`, `@typescript-eslint/no-unused-vars`,
+  `react-hooks/rules-of-hooks`, `react-hooks/exhaustive-deps`.
+
+## Prettier
+- Format: `prettier --write .`. Cấu hình `.prettierrc`.
+- Print width: 100 ký tự. Single quote, trailing comma `all`.
+
+## Testing (Vitest)
+- Unit: `tests/unit/*_test.ts` — validation, privacy, security.
+- Integration: `tests/integration/auth_test.ts`.
+- E2E: `tests/e2e/*.spec.ts` (Playwright, chạy thủ công).
+
+## Build pipeline (thứ tự bắt buộc)
+1. `npm run typecheck` → exit 0
+2. `npm run test` → tất cả pass
+3. `npm run build` → Compiled, ESLint clean

@@ -1,0 +1,38 @@
+---
+name: architecture
+description: >-
+  Quy tắc kiến trúc phần mềm cho Trạm Dừng Tâm Hồn — cấu trúc thư mục, naming convention,
+  phân tách Server vs Client Components, quy tắc middleware phân quyền route.
+  Triggers: architecture, structure, server action, middleware, layout, route groups.
+license: MIT
+---
+
+# Kiến trúc phần mềm
+
+## Cấu trúc thư mục
+- `src/app/` — App Router (Next.js 14). Route groups: `(marketing)`, `(auth)`, `dashboard`.
+- `src/components/` — component tái sử dụng, tách theo tính năng (ui, layout, home, auth, privacy, hugs).
+- `src/lib/` — business logic (supabase client/server/middleware, auth, validation, security, privacy).
+- `src/constants/` — magic numbers, route definitions, tin nhắn người dùng.
+- `src/schemas/` — TypeScript types cho data layer.
+- `src/hooks/` — hooks React tù biến (useAuth, useSession, useUser, useRole).
+
+## Naming Convention
+- Component: PascalCase (`BreathingOrb` không phải `breathing-orb`).
+- File: kebab-case hoặc PascalCase — đồng nhất trong cùng thư mục.
+- Function/hook: camelCase (`useGSAP`, `validateConsent`).
+
+## Server vs Client
+- Dùng `'use client'` ở đầu file **chỉ** khi cần hooks/state interactivity.
+- Server Actions (`async function`): đặt trong cùng file component, export dùng `<form action={...}>`.
+- Middleware (`src/middleware.ts`): giữa mọi request — xử lý auth session refresh + route protection.
+
+## Phân quyền route (middleware)
+- `AUTH_ROUTES` (login, register, forgot-password…): redirect đến `/dashboard` nếu đã auth.
+- `PROTECTED_ROUTES` (dashboard, journal, check-in, hugs, settings…): redirect `/login` nếu chưa auth.
+- `PUBLIC_ROUTES` (/, stories, knowledge, hugs, privacy, terms): truy cập tự do.
+
+## Database layer
+- Migrations trong `supabase/migrations/`, đánh số `000X`.
+- Functions: `supabase/functions/*.sql` (trigger PostgreSQL).
+- Seed data: `supabase/seed.sql`.

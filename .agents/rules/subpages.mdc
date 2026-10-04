@@ -1,0 +1,39 @@
+---
+name: subpages
+description: >-
+  Quy tắc các trang con — stories, knowledge, hugs, check-in, journal, dashboard, settings.
+  Triggers: page, section, layout, page header, pagination, card grid.
+license: MIT
+---
+
+# Chuẩn trang con (Subpages)
+
+## Layout pattern
+- Dùng `<MarketingLayout>` cho marketing pages → Header + Footer.
+- `<DashboardLayout>` cho dashboard.
+- `<AuthLayout>` cho login/register/forgot.
+
+## Page Header
+```tsx
+<section className="container-page py-16 md:py-24">
+  <p className="eyebrow">...</p>
+  <h1 className="font-display text-3xl md:text-4xl font-semibold">Title</h1>
+  <p className="mt-4 max-w-xl text-pretty text-lg text-muted-foreground">Lede</p>
+</section>
+```
+
+## Lists / Grids
+- Grid cards: `sm:grid-cols-2 lg:grid-cols-3`.
+- Spacing `gap-6 md:gap-8`.
+- Cards dùng `<InteractiveCard>`.
+
+## Empty state
+```tsx
+<p className="py-16 text-center text-muted-foreground">
+  Chưa có nội dung nào.
+</p>
+```
+
+## Pagination
+- `Link` tới trang tiếp theo. Nút `rel="next"`/`rel="prev"`.
+- Cursor-based (supabase) để performance.

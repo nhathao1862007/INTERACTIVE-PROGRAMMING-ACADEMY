@@ -1,0 +1,29 @@
+---
+name: legal
+description: >-
+  Quy tắc luật pháp — phân loại dữ liệu (PUBLIC/PRIVATE/SENSITIVE/CLINICAL),
+  Consent management, audit log format.
+  Triggers: privacy, legal, consent, audit, data policy, RLS.
+license: MIT
+---
+
+# Pháp lý + Bảo mật dữ liệu
+
+## Data Classification
+- `PUBLIC`: stories approved, knowledge posts.
+- `PRIVATE`: journal nhật ký, user profile cá nhân.
+- `SENSITIVE`: check-in cảm xúc, consent records.
+- `CLINICAL`: health records (`health/*`).
+
+## Consent (src/lib/privacy/consent.ts)
+- 6 loại consent: `essential`, `analytics`, `personalization`, `research`, `hugs`, `marketing`.
+- Luôn yêu cầu opt-in rõ ràng, có nút rút lui.
+
+## Audit Log
+- Trigger: `update_audit_log()` PostgreSQL function.
+- Log mỗi action: `INSERT/UPDATE/DELETE`, table name, user_id, IP, user_agent, timestamp.
+- Format timestamp ISO 8601, luôn UTC (`timezone('utc', now())`).
+
+## Quyền riêng tư toàn cầu
+- RLS trên mọi bảng chứa `auth.users` foreign key.
+- Export/xóa dữ liệu qua UI settings — ghi log audit.

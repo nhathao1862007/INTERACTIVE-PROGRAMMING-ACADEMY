@@ -1,0 +1,36 @@
+---
+name: forms
+description: >-
+  Quy tắc form — Zod validation schema, Server Actions pattern, error display, accessibility.
+  Triggers: form, input, validation, zod, server action, submit, error, textarea.
+license: MIT
+---
+
+# Form Patterns
+
+## Validation (Zod — src/lib/validation/schemas.ts)
+- Định nghĩa schema trước khi dùng `<FormField>`.
+- `z.string().min(1, "Vui lòng nhập...")` — luôn có `message` tiếng Việt.
+- Regex validation dùng `z.regex(...)`.
+
+## Component Pattern
+```tsx
+"use client";
+<form action={async (formData) => { "use server"; await register(formData); }}>
+```
+- Input: controlled, `aria-invalid`, `aria-describedby` cho error.
+- Submit: dùng `<form action>` + `<Button type="submit">`, không dùng `onSubmit` thủ công.
+- Loading: `<Button disabled>` + spinner.
+
+## Error Display
+```tsx
+{errors?.message && (
+  <p role="alert" className="mt-2 text-sm text-destructive">{errors.message}</p>
+)}
+```
+- Role alert để screen-reader đón nhận ngay.
+- Error icon: lucide `AlertCircle`.
+
+## Accessibility
+- `aria-required="true"`, placeholder rõ nghĩa (hoặc label).
+- Error state: border màu `ring-destructive`, transition mượt 150ms.

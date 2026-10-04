@@ -1,0 +1,35 @@
+---
+name: design-system
+description: >-
+  Hệ thống thiết kế Trạm Dừng Tâm Hồn — art direction "Editorial Calm",
+  palette roles, typography (Playfair + Be Vietnam Pro), spacing/radius tokens.
+  Triggers: design system, color, typography, palette, font, spacing.
+license: MIT
+---
+
+# Hệ thống thiết kế (Design System)
+
+## Palette (CSS vars, HSL)
+- `primary` — xanh rêu chủ đạo (`#2F6B5E` light / `#7AB8A7` dark).
+- `clay` — đất nung, italic accent.
+- `glow` — sáng dịu (`#E8D98B`).
+- `night-*` — nền tối footer/CTA.
+- `sand` — nền ấm xen kẽ section.
+- `moss`, `sage` — hỗ trợ.
+
+## Typography
+- **Body**: Be Vietnam Pro (`var(--font-sans)`) — hỗ trợ tiếng Việt đầy đủ dấu.
+- **Display/Heading**: Playfair Display (`var(--font-display)`) — serif, có italic.
+- `text-pretty` cho paragraph, `text-balance` cho heading ≤ 6 lines.
+- `tabular-nums` cho số động (stats, counter, thời gian).
+- Font smoothing: `html.antialiased` (root layout).
+
+## Art Direction: "Editorial Calm"
+- Bố cục 2 cột grid (`lg:grid-cols-[1.05fr_0.95fr]`).
+- Decorative `.grain` overlay, `.starfield` CSS dots.
+- Section nền xen kẽ `.bg-whisper`, `.night`.
+- Meta row kiểu tạp chí (e.g. "Số 01 — Năm 2026").
+
+## Spacing + Radius
+- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64.
+- Radius: `sm` → `3xl` (tính theo `var(--radius)`).

@@ -1,0 +1,37 @@
+---
+name: ux-rules
+description: >-
+  Quy tắc trải nghiệm người dùng — micro-interactions, feedback ngay lập tức,
+  reduced-motion, accessibility (WCAG AA), mental health-safe UX.
+  Triggers: ux, microinteraction, feedback, reduced motion, accessibility, mental health.
+license: MIT
+---
+
+# Trải nghiệm người dùng (UX)
+
+## Hành vi người dùng
+- Mọi action (click, submit) có feedback ngay lập tức (< 100ms).
+- Button: `active:scale-[0.96]` (interruptible CSS transition).
+- Hover: `transition-[transform] duration-150 ease-out`.
+
+## Reduced motion
+- GSAP enter/parallax luôn gói trong:
+  ```ts
+  gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {...});
+  ```
+- Khi giảm chuyển động: chỉ còn lại CSS (opacity, transform).
+
+## Accessibility (WCAG AA)
+- Contract màu tối thiểu 4.5:1 (foreground/background).
+- `aria-label`, `role="alert"`, `sr-only` cho hình ảnh/icon.
+- Keyboard navigation: tab order rõ ràng.
+
+## Mental health UX
+- Tránh urgency language ("quay lại ngay").
+- Tránh auto-play âm thanh/video.
+- Đặt nút "nghỉ ngơi" / "thở" trước button hành động nặng.
+- Thời gian chờ: không bắt buộc timeout, luôn cho phép hủy.
+
+## Loading states
+- Skeleton loader có `will-change: opacity`.
+- Button loading: disabled + spinner icon.

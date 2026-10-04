@@ -1,0 +1,32 @@
+---
+name: project
+description: >-
+  Quy tắc dự án — versioning, commit conventions, environment config, release process.
+  Triggers: project, version, commit, release, changelog, environment.
+license: MIT
+---
+
+# Quy tắc dự án
+
+## Phiên bản
+- `package.json` version: `0.x.y` (pre-1.0).
+- Dùng Conventional Commits + SemVer.
+
+## Môi trường (.env.local)
+| Variable | Mô tả |
+|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | API endpoint Supabase |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key |
+| `NEXT_PUBLIC_APP_URL` | Production URL |
+| `NEXT_PUBLIC_SENTRY_DSN` | (optional) monitoring |
+
+## Commit conventions
+- `feat: tính năng mới`
+- `fix: sửa lỗi`
+- `refactor: refactor`
+- `docs: cập nhật docs`
+- `chore: tooling`
+
+## CI/CD (docs/DEPLOYMENT.md)
+- GitHub Actions: Typecheck → Test → Build → Deploy Vercel.
+- Branch: `main` (production). Preview deployments từ PR.

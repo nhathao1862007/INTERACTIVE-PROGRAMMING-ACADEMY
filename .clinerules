@@ -1,0 +1,582 @@
+# Universal Coding Standards & AI Agent Guidance
+# Comprehensive rules for web application projects — read fully before generating or editing code.
+#
+# This file contains universal coding standards, patterns, and best practices
+# to be applied across all projects in this workspace.
+
+---
+
+## 0. Priority Order (Nguyên tắc ưu tiên)
+
+> **Security > Privacy > UX > Performance**
+
+---
+
+## 1. Tech Stack & Conventions
+
+### Core Technologies (có thể áp dụng cho mỗi dự án)
+- **Frontend:** Next.js 14 (App Router), React, TypeScript
+- **Styling:** Tailwind CSS, shadcn/ui, CSS Modules
+- **Animation:** GSAP (complex sequences, scroll-driven)
+- **Backend:** Node.js, Server Actions, REST/GraphQL APIs
+- **Database:** PostgreSQL, Supabase, Prisma
+- **Testing:** Vitest (unit), Playwright (E2E)
+- **CI/CD:** GitHub Actions, Vercel, Docker
+
+### Naming Convention
+- **Component:** PascalCase (`BreathingOrb` không phải `breathing-orb`)
+- **File:** kebab-case hoặc PascalCase — đồng nhất trong cùng thư mục
+- **Function/hook:** camelCase (`useGSAP`, `validateInput`)
+
+---
+
+## 2. Project Structure (Directory Convention)
+
+```
+src/
++-- app/         # Next.js App Router (route groups)
++-- components/  # UI tách theo nhóm (ui/, layout/, shared/)
++-- constants/   # Hằng số: routes, colors, validation
++-- hooks/       # Custom hooks
++-- lib/         # Services, utilities
++-- schemas/     # Zod validation schemas
++-- types/       # TypeScript types
+```
+
+### Server vs Client Components
+- Dùng `'use client'` ở đầu file **chỉ** khi cần hooks/state interactivity
+- Server Actions (`async function`): đặt trong cùng file component, export dùng `<form action={...}>`
+- Middleware: giữ mỗi request — xử lý auth session refresh + route protection
+
+### Route Protection Pattern
+| Loại route | Hành động |
+|---|---|
+| Auth routes (login, register) | Redirect to dashboard nếu đã auth |
+| Protected routes | Redirect to login nếu chưa auth |
+| Public routes | Truy cập tự do |
+
+---
+
+## 3. Skill Catalog (Danh mục kỹ năng)
+
+> Mỗi skill nằm trong `.agents/skills/<skill-name>/SKILL.md`. Luôn đọc skill tương ứng trước khi viết code.
+
+| Skill | Trigger Terms | Khi nào dùng |
+|---|---|---|
+| `skills-animation.md` | animation, gsap, framer-motion, react-spring, animejs, css animation, transition, motion | Animation standards tổng hợp — **luôn đọc trước khi viết animation code** |
+| `gsap-core` | gsap tween, easing, animation, matchMedia | Tween đơn, easing, responsive, reduced-motion |
+| `gsap-react` | useGSAP, @gsap/react, React animation | Animation trong React/Next.js — dùng useGSAP() + scope |
+| `gsap-timeline` | timeline, sequencing, position param | Nhiều tween ghép lại thành sequence |
+| `gsap-scrolltrigger` | ScrollTrigger, scroll animation, pinning | Animation gắn với scroll |
+| `gsap-performance` | animation performance, jank, FPS | Tối ưu animation, tránh layout thrashing |
+| `gsap-plugins` | Flip, Draggable, ScrollTo, SplitText | Plugin registration & usage |
+| `gsap-utils` | clamp, mapRange, snap, toArray, wrap | Helper utilities trong animation |
+| `gsap-frameworks` | Vue, Svelte, Nuxt, onMounted | GSAP trong Vue/Svelte (không phải React) |
+| `make-interfaces-feel-better` | UI polish, typography, surfaces, icons | UI/UX micro-details, visual polish |
+| `frontend-design` | website, landing page, beautify, design | Tạo giao diện đẹp, đặc trưng |
+| `ui-ux-pro-max` | design, review, fix UI, landing, dashboard | UI/UX design intelligence |
+| `senior-architect` | architecture, system design, tech decision | Thiết kế kiến trúc, tech stack |
+| `senior-backend` | API, database, backend, security | Backend, database optimization |
+| `senior-frontend` | React, Next.js, Tailwind, component | Frontend development, optimization |
+| `code-reviewer` | code review, pull request, best practices | Review code, chất lượng, bảo mật |
+
+---
+
+## 4. Core Rules (Quy tắc cốt lõi)
+
+### Bắt buộc (Must)
+- [ ] Mỗi component/file đều có **comment header** mô tả mục đích (`@module`)
+- [ ] Mỗi thay đổi database → **migration mới** trong thư mục migrations phù hợp
+- [ ] Mỗi bảng mới → **bật RLS** ngay trong migration (nếu dùng Supabase/PostgreSQL)
+- [ ] Mỗi input từ người dùng → **Zod schema** trước khi lưu
+- [ ] Không **hard-code secrets**; dùng `.env.local` (gitignored)
+- [ ] Test trước khi merge: `npm test`, `npm run typecheck`, `npm run lint`
+- [ ] **Luôn đọc `skills-animation.md` đầu tiên để chọn animation library**
+
+### GSAP Animations
+- Áp dụng gsap-core, gsap-react, gsap-timeline, gsap-scrolltrigger, gsap-performance, gsap-plugins, gsap-utils, gsap-frameworks
+- Wrap trong `gsap.matchMedia()` cho responsive và prefers-reduced-motion
+
+### UI/UX
+- Khi build/tweak UI, đọc `make-interfaces-feel-better` + sub-docs
+
+---
+
+## 5. Code Quality (Chất lượng code)
+
+### TypeScript (strict mode)
+- `tsconfig.json`: `"strict": true`, `"noUnusedLocals": true`, `"noUnusedParameters": true`
+- Phải ép kiểu trả về hàm: `function foo(): string {}`
+- Tránh `any` — dùng `unknown` + type narrowing, hoặc `z.infer<typeof schema>`
+
+### ESLint
+- Chạy `npm run lint` trước commit. Auto-fix: `eslint --fix`
+- Rules: `@typescript-eslint/no-explicit-any`, `@typescript-eslint/no-unused-vars`, `react-hooks/rules-of-hooks`, `react-hooks/exhaustive-deps`
+
+### Prettier
+- Format: `prettier --write .`
+- Print width: 100 ký tự. Single quote, trailing comma `all`
+
+### Testing (Vitest)
+- Unit: `tests/unit/*_test.ts`
+- Integration: `tests/integration/*_test.ts`
+- E2E: `tests/e2e/*.spec.ts` (Playwright)
+
+### Build pipeline (thứ tự bắt buộc)
+1. `npm run typecheck` → exit 0
+2. `npm run test` → tất cả pass
+3. `npm run build` → Compiled, ESLint clean
+
+---
+
+## 6. Database (Cơ sở dữ liệu)
+
+### Row Level Security (RLS)
+- **Mỗi bảng đều bật RLS** (nếu dùng Supabase/PostgreSQL)
+- Policy theo `auth.uid()` hoặc user identity tương đương
+- `public.has_role(role)` — kiểm tra role từ `profiles` hoặc bảng users
+
+### Data Classification (ví dụ generic)
+| Level | Ví dụ | Truy cập |
+|---|---|---|
+| **PUBLIC** | Nội dung đã duyệt, knowledge posts | Mọi người |
+| **PRIVATE** | User profile, personal entries | Owner |
+| **SENSITIVE** | Health/financial data, personal records | Owner + authorized parties |
+| **CLINICAL/SENSITIVE** | Records requiring consent | Owner + authorized parties + audit log |
+
+### Indexing strategy
+- FK columns luôn có index
+- Query theo thời gian nên có composite index: `(user_id, created_at desc)`
+- Unique constraint cho composite keys khi cần
+
+### Constraints
+- FK → `auth.users` với `ON DELETE CASCADE`: xóa tài khoản = xóa sạch dữ liệu liên quan
+- Audit logs: `ON DELETE SET NULL` cho `user_id`/`actor_id`
+- Check constraints bảo vệ domain (status enum values, range values, privacy_level)
+
+---
+
+## 7. Security (Bảo mật)
+
+### Phòng thủ theo lớp (Defense in depth)
+1. **Transport:** HTTPS, HSTS, TLS 1.2+
+2. **HTTP Headers:** CSP, X-Frame-Options=DENY, X-Content-Type-Options=nosniff, Referrer-Policy
+3. **Input validation:** Zod schemas — mỗi ngõ vào
+4. **Output sanitization:** `escapeHtml`, `stripHtml`, `sanitizeUrl` chống XSS
+5. **RLS:** mỗi bảng bật RLS (nếu dùng Supabase)
+6. **Least privilege:** anon key cho client; service role key chỉ trên server
+7. **Audit:** truy cập dữ liệu nhạy cảm luôn ghi audit log (append-only)
+8. **Rate limiting:** auth endpoints stricter hơn public endpoints
+
+### Security Headers
+| Header | Value | Mục đích |
+|---|---|---|
+| `X-Content-Type-Options` | `nosniff` | Prevent MIME sniffing |
+| `X-Frame-Options` | `DENY` | Prevent clickjacking |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Limit referrer leakage |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | Disable sensitive APIs |
+
+### Authentication & Session
+- JWT session với refresh token rotation
+- Refresh qua Edge Middleware để cookie luôn hợp lệ
+- Protected routes redirect về login nếu chưa xác thực
+
+### Audit Logging
+- Log: action (INSERT/UPDATE/DELETE), table, user_id, IP (hash SHA-256), user_agent, timestamp (ISO 8601, UTC)
+- Retention: tuỳ theo yêu cầu domain (2 năm cho healthcare/finance)
+
+### Checklist bảo mật khi code
+- [ ] Mỗi input từ client đều qua Zod schema
+- [ ] React không dùng `dangerouslySetInnerHTML` với dữ liệu user (nếu cần → sanitize trước)
+- [ ] Không import `server-only` secrets vào Client Components
+- [ ] Không thêm bảng mới mà quên RLS
+- [ ] Không hard-code secret; dùng `.env.local`
+- [ ] `npm audit --audit-level=moderate` — không critical vulnerabilities
+
+---
+
+## 8. Privacy & Compliance (Quyền riêng tư & Tuân thủ)
+
+### GDPR-inspired Principles
+- **Data Minimization:** Chỉ thu thập dữ liệu cần thiết; mỗi trường đều có mô tả mục đích
+- **Purpose Limitation:** Dữ liệu chỉ dùng cho mục đích đã đăng ký
+- **Storage Limitation:** Data hết hạn được archive tự động
+- **Right to Deletion:** User xóa tài khoản; recovery window tuỳ domain
+- **Right to Data Portability:** Export JSON/CSV/PDF
+
+### Consent Management (pattern cho projects yêu cầu)
+- Luôn yêu cầu opt-in rõ ràng, có nút rút lui
+- Trạng thái: `pending → granted | denied` và `granted → revoked`
+- Hiệu lực tức thì
+
+---
+
+## 9. UI/UX & Design System
+
+### Nguyên tắc UX
+1. **Calm by default:** màu dịu, spacing rộng, không gấp gáp
+2. **Riêng tư hiển nhiên:** mọi dữ liệu hướng dẫn là PRIVATE; chỉ công khai khi chỉ định
+3. **Giảm nhận thức tải:** 1 nhiệm vụ chính mỗi màn hình
+4. **Accessibility:** WCAG AA+, tôn trọng `prefers-reduced-motion`
+
+### Color System (Calm Modern)
+| Vai trò | Light | Dark |
+|---|---|---|
+| background | #FBFBF9 | #131716 |
+| foreground | #1C1917 | #ECE9E4 |
+| primary | #2F6B5E | #7AB8A7 |
+| accent | #EBE8F6 | #26243A |
+| success | #2E8B57 | #58A87E |
+| destructive | #D6455D | #E27083 |
+
+### Typography
+- **Font:** Be Vietnam Pro (sans) — hỗ trợ tiếng Việt đầy đủ
+- **Display/Heading:** Playfair Display (serif, có italic)
+- `text-pretty` cho paragraph, `text-balance` cho heading ≤ 6 lines
+- `tabular-nums` cho sử dụng (stats, counter, thời gian)
+- Font smoothing: `html.antialiased` (root layout)
+
+### Spacing + Radius
+- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 48, 64 (4px grid)
+- Radius: base `0.75rem` (`var(--radius)`), `sm` → `3xl`
+
+### UX Behavior
+- Feedback ngay lập tức (< 100ms) cho mỗi action
+- Button: `active:scale-[0.96]` (interruptible CSS transition)
+- Hover: `transition-[transform] duration-150 ease-out`
+- Reduced motion: GSAP enter/parallax luôn wrap trong `gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", ...)`
+- Accessibility (WCAG AA): contrast màu ≥ 4.5:1, `aria-label`, `role="alert"`, `sr-only`, keyboard navigation
+- Loading: skeleton có `will-change: opacity`, button loading: disabled + spinner
+
+### UI Polish (Concentric Border Radius, Optical Alignment, Shadows vs Borders)
+- Outer radius = inner radius + padding
+- Button text + icon: optical alignment adjustment
+- Dùng `box-shadow: 0 0 0 1px color` cho elevation
+- `outline-black/10` và `outline-white/10` cho image outlines
+
+---
+
+## 10. Animation Standards
+
+> **BẮT BUỘC:** Trước khi viết bất kỳ animation code nào, đọc file `skills-animation.md` để chọn library và pattern phù hợp.
+
+### 10.1 Animation Library Selection
+
+| Library | Use Case | Install |
+|---|---|---|
+| **GSAP** | Complex timelines, scroll-driven, SVG morphing | `npm i gsap` |
+| **CSS Transitions** | Interactive state changes (hover, toggle) | built-in |
+| **CSS Keyframes** | One-shot enter animations, loading | built-in |
+| **Framer Motion** | Declarative React animations, layout, gestures | `npm i framer-motion` |
+| **React Spring** | Physics-based animations, gesture-driven | `npm i @react-spring/web` |
+| **Anime.js** | Lightweight vanilla JS, SVG paths | `npm i animejs` |
+
+### 10.2 Core Rules
+
+1. **Đọc `skills-animation.md`** trước khi viết animation code
+2. **Animate GPU-accelerated properties only:** `transform` (x, y, scale, rotation) và `opacity`
+3. **Tránh layout-triggering properties:** `width`, `height`, `top`, `left`, `margin`, `padding`
+4. **Respect `prefers-reduced-motion`** — wrap trong `gsap.matchMedia()` hoặc CSS media query
+5. **Interruptible animations** cho interactive elements (CSS transitions > keyframes)
+6. **Motion restraint** — motion is a budget, not a garnish
+
+### 10.3 Quick Reference
+
+| Scenario | Recommended |
+|---|---|
+| Button hover/toggle | CSS transition |
+| Page hero entrance | GSAP from() or Motion variants |
+| Scroll-driven reveal | GSAP ScrollTrigger |
+| Complex sequencing | GSAP Timeline |
+| Staggered list | GSAP stagger or Motion staggerChildren |
+| Layout expand/collapse | Framer Motion `layout` |
+| SVG path morphing | GSAP or Anime.js |
+| Icon swap (toggle) | AnimatePresence with `initial={false}` |
+
+---
+
+## 11. GSAP Animation Rules
+
+> Nguồn: `.agents/skills/gsap-*/SKILL.md`
+
+### 11.1 GSAP Core
+
+#### Core Tween Methods
+- `gsap.to(targets, vars)` — animate từ current state đến `vars`
+- `gsap.from(targets, vars)` — animate từ `vars` đến current state
+- `gsap.fromTo(targets, fromVars, toVars)` — explicit start/end
+- `gsap.set(targets, vars)` — apply immediately (duration 0)
+- Dùng **camelCase** cho property names (`backgroundColor`, `rotationX`)
+
+#### Easing
+```js
+ease: "power1.out"   // default
+ease: "power3.inOut"
+ease: "back.out(1.7)"
+ease: "elastic.out(1, 0.3)"
+ease: "none"         // linear
+```
+
+#### Transform aliases (PREFER over raw transform string)
+| GSAP | CSS equivalent |
+|---|---|
+| `x`, `y`, `z` | translateX/Y/Z (px) |
+| `xPercent`, `yPercent` | % |
+| `scale`, `scaleX`, `scaleY` | scale |
+| `rotation` | rotate (deg) |
+| `rotationX`, `rotationY` | 3D rotate |
+| `skewX`, `skewY` | skew |
+| `transformOrigin` | transform-origin |
+
+- **autoAlpha** — prefer over `opacity`. Khi 0, set `visibility: hidden`
+
+### 11.2 GSAP React
+
+#### useGSAP() Hook (PREFER over useEffect)
+```js
+import { useGSAP } from "@gsap/react";
+gsap.registerPlugin(useGSAP); // register before running
+
+const containerRef = useRef(null);
+useGSAP(() => {
+  gsap.to(".box", { x: 100 });
+  gsap.from(".item", { opacity: 0, stagger: 0.1 });
+}, { scope: containerRef });
+```
+
+#### Best practices
+- ✅ Dùng **useGSAP()** thay vì `useEffect()`/`useLayoutEffect()`
+- ✅ Pass **scope** (ref/element) để selectors được giới hạn
+- ✅ Cleanup (reverting) chạy tự động trên unmount
+- ✅ Dùng **contextSafe** để wrap callbacks
+
+### 11.3 GSAP Timeline
+
+#### Tạo timeline
+```js
+const tl = gsap.timeline();
+tl.to(".a", { x: 100, duration: 1 })
+  .to(".b", { y: 50, duration: 0.5 })
+  .to(".c", { opacity: 0, duration: 0.3 });
+```
+
+#### Position parameter (3rd argument)
+- **Absolute:** `1` — start at 1s
+- **Relative:** `"+=0.5"` — 0.5s sau end; `"-=0.2"` — 0.2s trước end
+- **Label:** `"labelName"` — tại label; `"labelName+=0.3"` — 0.3s sau label
+- **Placement:** `"<"` — start cùng tween trước; `">"` — start khi tween trước end (default)
+
+### 11.4 GSAP ScrollTrigger
+
+#### Register plugin (once)
+```js
+gsap.registerPlugin(ScrollTrigger);
+```
+
+#### Basic trigger
+```js
+gsap.to(".box", {
+  x: 500, duration: 1,
+  scrollTrigger: {
+    trigger: ".box",
+    start: "top center",
+    end: "bottom center",
+    toggleActions: "play reverse play reverse"
+  }
+});
+```
+
+#### Key config options
+| Property | Mô tả |
+|---|---|
+| `trigger` | Element định nghĩa vị trí start (required) |
+| `start` | Khi trigger active. Default `"top bottom"` |
+| `end` | Khi trigger kết thúc. Default `"bottom top"` |
+| `scrub` | `true` = direct link; number = seconds để "catch up" |
+| `toggleActions` | Thứ tự: onEnter, onLeave, onEnterBack, onLeaveBack |
+| `pin` | `true` = pin trigger element |
+| `markers` | `true` cho dev markers — **loại bỏ khi production** |
+
+### 11.5 GSAP Performance
+
+- ✅ Animate: **x, y, scale, rotation, opacity** (transform & opacity)
+- ❌ Tránh: **width, height, top, left, margin, padding** (trigger layout)
+- Dùng `will-change: transform` chỉ cho elements thực sự animate
+- Dùng **stagger** thay vì nhiều separate tweens với manual delays
+- Dùng `gsap.quickTo()` cho frequent updates (mouse followers)
+
+### 11.6 GSAP Plugins
+
+#### Register plugins (once)
+```js
+import gsap from "gsap";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { Flip } from "gsap/Flip";
+import { Draggable } from "gsap/Draggable";
+gsap.registerPlugin(ScrollToPlugin, Flip, Draggable);
+```
+
+### 11.7 GSAP Utils
+
+- `clamp(min, max, value?)` — ràng buộc giá trị
+- `mapRange(inMin, inMax, outMin, outMax, value?)` — map từ range sang range khác
+- `normalize(min, max, value?)` — chuẩn hoá về 0–1
+- `interpolate(start, end, progress?)` — nội suy giữa 2 giá trị
+- `random(min, max, snap?)` — ngẫu nhiên trong range
+- `snap(snapTo, value?)` — snap về step/labels
+- `toArray(value, scope?)` — convert selector/NodeList/element thành array
+- `wrap(min, max, value?)` — wrap value vào range
+
+**Lưu ý:** GSAP CSSPlugin không parse được `var(--token)` trong chuỗi màu → resolve bằng `getComputedStyle(...)` rồi truyền `rgb()/rgba()/hex` cụ thể.
+
+### 11.8 GSAP Frameworks (Vue, Svelte, Nuxt)
+
+- Tạo tweens/ScrollTriggers **sau** khi DOM sẵn sàng (onMounted, onMount)
+- Kill/revert chúng trong unmount cleanup
+- Scope selectors tới component root
+- `gsap.context()` + cleanup `ctx.revert()`
+
+---
+
+## 12. Component System
+
+| Component | Mô tả |
+|---|---|
+| Button | 6 variants, 4 sizes |
+| Input / Textarea | Focus ring chuẩn |
+| Card / InteractiveCard | Hover nâng nhẹ |
+| Alert | destructive/success/info |
+| Badge | 6 variants |
+| Toast | tự ẩn 5s |
+
+---
+
+## 13. Form Patterns
+
+### Validation (Zod)
+- Định nghĩa schema trước khi dùng form component
+- `z.string().min(1, "Vui lòng nhập...")` — luôn có message rõ ràng
+
+### Component Pattern
+```tsx
+"use client";
+<form action={async (formData) => { "use server"; await submit(formData); }}>
+```
+
+- Input: controlled, `aria-invalid`, `aria-describedby` cho error
+- Submit: dùng `<form action>` + `<Button type="submit">`, **không dùng onSubmit thủ công**
+- Loading: `<Button disabled>` + spinner
+
+### Error Display
+```tsx
+{errors?.message && (
+  <p role="alert" className="mt-2 text-sm text-destructive">{errors.message}</p>
+)}
+```
+
+---
+
+## 14. Responsive Design
+
+### Breakpoints (Tailwind)
+- `sm`: 640px, `md`: 768px, `lg`: 1024px, `xl`: 1280px, `2xl`: 1440px
+- Mobile-first: viết class mobile trước, `md:`/`lg:` override
+
+### Grid / Layout
+- Desktop: 2-column grid (`lg:grid-cols-[1.05fr_0.95fr]`)
+- Tablet/mobile: 1-col, padding container
+- Section padding: `py-16 md:py-20`, `py-20 md:py-24`
+
+### Typography scaling
+- Dùng `clamp()` cho font size: `text-[clamp(2.25rem,5vw,3rem)]`
+- Line height: 1.04–1.12 heading, 1.6–1.75 body
+
+### Touch targets
+- Nút nhấn tối thiểu 40×40px
+- Form input padding = 12px
+
+---
+
+## 15. SEO Engineering
+
+### Metadata (Next.js App Router)
+```tsx
+export const metadata: Metadata = {
+  title: "...",          // ≤ 60 ký tự
+  description: "...",    // ≤ 160 ký tự
+  openGraph: {
+    title, description, images: [{ url: "/og.png" }],
+    locale: "vi_VN", type: "website",
+  },
+  robots: { index: true, follow: true },
+};
+```
+
+### robots.txt (root)
+```
+User-agent: *
+Disallow: /dashboard/
+Allow: /
+Sitemap: https://domain.com/sitemap.xml
+```
+
+### Open Graph image (`public/og.png`)
+- Kích thước: 1200×630px
+
+---
+
+## 16. Deployment & CI/CD
+
+### CI/CD Pipeline
+Install → Lint+Typecheck → Unit test → Build → E2E → Deploy
+
+### Pre-production Checklist
+- [ ] Security headers hoạt động (`curl -I`)
+- [ ] `npm run lint` + `npm run typecheck` + `npm test` pass
+- [ ] Env vars đúng với environment
+
+---
+
+## 17. Git & Review
+
+### Commit conventions
+- `feat: tính năng mới`
+- `fix: sửa lỗi`
+- `refactor: refactor`
+- `docs: cập nhật docs`
+- `chore: tooling`
+- Commit nhỏ theo task
+
+### PR process
+1. Fork repo & branch: `feat/<mô-tả>` hoặc `fix/<mô-tả>`
+2. Cài đặt: `npm install`, chạy `npm run dev`
+3. Test: `npm run lint`, `npm run typecheck`, `npm test`
+4. Commit nhỏ, mô tả rõ. Tạo PR với checklist bảo mật
+
+---
+
+## 18. SKILL.md Requirements (Tạo/Sửa Skills)
+
+### Frontmatter (YAML)
+- **`name`** (required): lowercase, hyphens only, max 64 chars, phải khớp với tên thư mục cha
+- **`description`** (required): skill làm gì và khi nào dùng; bao gồm trigger terms. Max 1024 chars
+- **`license`** (optional): ví dụ `MIT`
+
+### Body
+- Markdown instructions dưới ~500 dòng
+- Đặt reference material dài trong `references/` hoặc `scripts/` và link từ SKILL.md
+
+---
+
+## 19. References
+
+- [Agent Skills specification](https://agentskills.io/specification.md)
+- [skills CLI (discovery, install)](https://github.com/vercel-labs/skills)
+- Các file gốc trong `.agents/skills/` — luôn tham khảo khi cần chi tiết:
+  - `skills-animation.md` — animation standards tổng hợp (GSAP, Framer Motion, React Spring, Anime.js, CSS)
+  - `skills/llms.txt` — repo guidance
+  - `skills/rules/*.md` & `*.mdc` — coding rules, security, privacy, UX
+  - `skills/gsap-*/SKILL.md` — GSAP best practices
+  - `skills/make-interfaces-feel-better/` — UI polish principles
+  - `skills/ui-ux-pro-max/SKILL.md` — UI/UX design intelligence
+  - `skills/code-reviewer/`, `senior-architect/`, `senior-backend/`, `senior-frontend/` — advanced skills

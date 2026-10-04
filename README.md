@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CODEVERSE Academy
+
+> Nền tảng học lập trình tương tác — Biến việc học từ "đọc lý thuyết" thành "quan sát → tương tác → viết code → chạy thử → sửa lỗi"
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router) + TypeScript
+- **Styling**: Tailwind CSS
+- **State**: Zustand
+- **Validation**: Zod
+- **ORM**: Drizzle ORM
+- **Editor**: Monaco Editor
+- **Charts**: Recharts
+- **Database**: PostgreSQL
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+src/
+├── app/                    # Next.js App Router pages
+│   ├── page.tsx           # Home — Career path selection
+│   ├── roadmap/           # Skill tree roadmap
+│   ├── courses/           # Course listing + lessons
+│   ├── algorithms/        # Algorithm visualizer
+│   ├── playground/        # Code editor + execution
+│   ├── exercises/        # Exercise engine
+│   ├── progress/          # Progress dashboard
+│   ├── projects/          # Project-based learning
+│   ├── videos/            # Video lessons
+│   ├── achievements/      # Gamification
+│   └── profile/           # User profile
+├── components/
+│   ├── layout/            # Sidebar, Header
+│   ├── algorithms/        # Algorithm visualizer
+│   └── lessons/           # Lesson viewer
+├── content/               # Educational content (seed data)
+│   ├── python-course.ts
+│   ├── algorithms.ts
+│   └── career-paths.ts
+├── db/
+│   └── schema.ts          # Drizzle ORM schema
+├── lib/
+│   └── utils.ts           # Utility functions
+└── types/
+    └── index.ts           # TypeScript types
+```
 
-## Learn More
+## Features (MVP)
 
-To learn more about Next.js, take a look at the following resources:
+- [x] Home với career path selection
+- [x]Roadmap engine với skill tree
+- [x]Python course (5 chapters, 8+ lessons)
+- [x]Lesson UI với sections (concept, syntax, example, playground, quiz)
+- [x]Code Playground với Monaco Editor
+- [x]Algorithm Visualizer (Bubble Sort, Binary Search, Linear Search)
+- [x]Exercise engine (multiple choice, predict output)
+- [x]Progress tracking dashboard
+- [x]Achievements system
+- [x]Projects listing
+- [x]Video lessons listing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Roadmap
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Phase 1 (MVP) — Done
+- Core layout + navigation
+- Python course với 8+ lessons
+- Algorithm visualizer (3 algorithms)
+- Code playground
+- Exercise engine
+- Progress tracking
 
-## Deploy on Vercel
+### Phase 2
+- C++ course
+- JavaScript course
+- Data structures visualizer
+- More algorithms (Merge Sort, Quick Sort, BFS, DFS)
+- User authentication
+- Real code execution sandbox
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Phase 3
+- Java, TypeScript, SQL courses
+- Project submission system
+- Cross-language comparison
+- Concept graph
+- Search system
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Phase 4
+- AI learning assistant
+- Advanced sandbox
+- Collaboration features
+- Leaderboard
+- Certificates
+
+## Database
+
+See [DATABASE.md](./DATABASE.md) for full schema design.
+
+## Architecture
+
+See [ARCHITECTURE.md](./ARCHITECTURE.md) for system architecture.

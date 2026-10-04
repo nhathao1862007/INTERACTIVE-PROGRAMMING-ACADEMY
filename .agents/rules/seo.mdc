@@ -1,0 +1,44 @@
+---
+name: seo
+description: >-
+  Quy tắc SEO — metadata, Open Graph, structured data JSON-LD, canonical URLs, robots.txt.
+  Triggers: seo, metadata, opengraph, structured data, robots, canonical.
+license: MIT
+---
+
+# SEO Engineering
+
+## Metadata (Next.js App Router)
+```tsx
+export const metadata: Metadata = {
+  title: "...",
+  description: "...",
+  openGraph: {
+    title, description, images: [{ url: "/og.png" }],
+    locale: "vi_VN", type: "website",
+  },
+  robots: { index: true, follow: true },
+};
+```
+- Title độc nhất, ≤ 60 ký tự.
+- Description ≤ 160 ký tự.
+
+## Structured Data (JSON-LD)
+- Dùng cho knowledge posts: `@type: Article`, author, datePublished.
+- Dùng cho hugs: `@type: CreativeWork`.
+
+## URL structure
+- Cố định slug: lowercase, hyphen-separated.
+- Canonical trùng với URL thực tế.
+
+## robots.txt (root)
+```
+User-agent: *
+Disallow: /dashboard/
+Allow: /
+Sitemap: https://tramdungtamhon.vn/sitemap.xml
+```
+
+## Open Graph image (`public/og.png`)
+- Kích thước: 1200×630px.
+- Font: Playfair Display, màu nền `primary`.

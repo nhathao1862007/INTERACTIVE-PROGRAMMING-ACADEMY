@@ -1,0 +1,35 @@
+---
+name: copywriting-sales
+description: >-
+  Style guide viết copy cho Trạm Dừng Tâm Hồn — tone of voice, microcopy cho buttons/alerts,
+  nguyên tắc headline người dùng cảm thấy được lắng nghe chứ không bị bán hàng.
+  Triggers: copy, microcopy, tone, voice, headline, button text, CTA.
+license: MIT
+---
+
+# Copywriting + Sales
+
+## Tone of Voice: "Lắng nghe"
+- **Không bán hàng** — người dùng cần cảm thấy an toàn, được thấu hiểu.
+- **Dịu dàng nhưng rõ ràng** — tránh jargon chuyên ngành.
+- **Đồng cảm** — dùng "bạn", chia sẻ cảm xúc chung.
+
+## Headline Principles
+1. Giải quyết một nỗi đau nhỏ:
+   ❌ "Nền tảng sức khỏe tinh thần toàn diện"
+   ✅ "Mỗi tâm hồn xứng đáng được lắng nghe"
+2. Độ dài ≤ 10 từ (đọc trong 3 giây).
+3. Dùng `font-display` (Playfair) + `italic` cho từ nhấn mạnh.
+
+## Microcopy Patterns
+| Context | Before | After |
+|---|---|---|
+| Primary CTA | `Bắt đầu` | `Bắt đầu hành trình` |
+| Secondary link | `Chi tiết` | `Tìm hiểu thêm` |
+| Form button | `Gửi` | `Lưu thay đổi` / `Gửi yêu cầu` |
+| Error msg | `Có lỗi` | `Vui lòng kiểm tra lại thông tin` |
+| Empty state | `Không có dữ liệu` | `Chưa có bài viết nào — hãy chia sẻ câu chuyện của bạn` |
+
+## Accessibility-aware
+- `aria-label`, `sr-only` cho mọi interactive element không có text.
+- Contract màu (AA): `text-foreground` trên `bg-background`.
